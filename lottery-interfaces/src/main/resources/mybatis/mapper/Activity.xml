@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.glimound.lottery.infrastructure.dao.IActivityDao">
+    <insert id="insert" parameterType="activity">
+        INSERT INTO activity
+        (activity_id, activity_name, activity_desc, begin_date_time, end_date_time,
+         stock_count, take_count, state, creator, create_time, update_time)
+        VALUES
+        (#{activityId}, #{activityName}, #{activityDesc}, #{beginDateTime}, #{endDateTime},
+         #{stockCount}, #{takeCount}, #{state}, #{creator}, now(), now())
+    </insert>
+
+    <select id="getActivityById" resultType="activity">
+        SELECT activity_id, activity_name, activity_desc, begin_date_time, end_date_time,
+               stock_count, take_count, state, creator, create_time, update_time
+        FROM activity
+        WHERE activity_id = #{activityId}
+    </select>
+</mapper>
