@@ -52,10 +52,12 @@ public class SpringRunnerTest {
 
     @Test
     public void test_drawExec() {
-        drawExec.doDrawExec(new DrawReq("marina", 10001L));
-        drawExec.doDrawExec(new DrawReq("tony", 10001L));
-        drawExec.doDrawExec(new DrawReq("johnson", 10001L));
-        drawExec.doDrawExec(new DrawReq("aby", 10001L));
+        for (int i = 0; i < 100; i++) {
+            drawExec.doDrawExec(new DrawReq("marina", 10001L));
+            drawExec.doDrawExec(new DrawReq("tony", 10001L));
+            drawExec.doDrawExec(new DrawReq("johnson", 10001L));
+            drawExec.doDrawExec(new DrawReq("aby", 10001L));
+        }
     }
 
 }

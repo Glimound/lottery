@@ -14,8 +14,8 @@ import java.util.List;
  * 总体概率抽奖：排除已抽空的奖项，剩余奖项按照比例重新计算概率
  * @author Glimound
  */
-@Component("defaultRateRandomDrawAlgorithm")
-public class DefaultRateRandomDrawAlgorithm extends BaseAlgorithm {
+@Component("entiretyRateRandomDrawAlgorithm")
+public class EntiretyRateRandomDrawAlgorithm extends BaseAlgorithm {
     @Override
     public Long randomDraw(Long strategyId, List<Long> excludeAwardIds) {
 
@@ -31,14 +31,14 @@ public class DefaultRateRandomDrawAlgorithm extends BaseAlgorithm {
         }
 
         if (availableAwards.size() == 0) {
-            return -1L;
+            return null;
         }
         if (availableAwards.size() == 1) {
             return availableAwards.get(0).getAwardId();
         }
 
         // 获取1~100的随机数
-        int randomVal = new SecureRandom().nextInt(100) + 1;
+        int randomVal = this.generateSecureRandomIntCode(100);
 
         int rateSum = 0;
         for (AwardRateInfo awardRateInfo : availableAwards) {
@@ -50,6 +50,6 @@ public class DefaultRateRandomDrawAlgorithm extends BaseAlgorithm {
             }
         }
 
-        return -1L;
+        return null;
     }
 }

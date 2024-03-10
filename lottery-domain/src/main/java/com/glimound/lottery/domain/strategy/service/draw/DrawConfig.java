@@ -1,5 +1,6 @@
 package com.glimound.lottery.domain.strategy.service.draw;
 
+import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 
 import javax.annotation.PostConstruct;
@@ -12,16 +13,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DrawConfig {
     @Resource
-    private IDrawAlgorithm defaultRateRandomDrawAlgorithm;
+    private IDrawAlgorithm entiretyRateRandomDrawAlgorithm;
 
     @Resource
     private IDrawAlgorithm singleRateRandomDrawAlgorithm;
 
-    protected static Map<Integer, IDrawAlgorithm> drawAlgorithmMap = new ConcurrentHashMap<>();
+    // 抽奖策略组
+    protected static Map<Integer, IDrawAlgorithm> drawAlgorithmGroup = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
-        drawAlgorithmMap.put(1, singleRateRandomDrawAlgorithm);
-        drawAlgorithmMap.put(2, defaultRateRandomDrawAlgorithm);
+        drawAlgorithmGroup.put(Constants.StrategyMode.SINGLE.getCode(), singleRateRandomDrawAlgorithm);
+        drawAlgorithmGroup.put(Constants.StrategyMode.ENTIRETY.getCode(), entiretyRateRandomDrawAlgorithm);
     }
 }

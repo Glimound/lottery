@@ -21,11 +21,11 @@ public class SingleRateRandomDrawAlgorithm extends BaseAlgorithm {
         assert rateTuple != null;
 
         // 生成1~100的随机数
-        int randomVal = new SecureRandom().nextInt(100) + 1;
+        int randomVal = this.generateSecureRandomIntCode(100);
         Long awardId = rateTuple[hashIdx(randomVal)];
 
         if (excludeAwardIds.contains(awardId)) {
-            return -1L;
+            return null;
         }
 
         return awardId;

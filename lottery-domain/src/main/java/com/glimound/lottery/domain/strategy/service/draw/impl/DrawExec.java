@@ -1,21 +1,10 @@
 package com.glimound.lottery.domain.strategy.service.draw.impl;
 
-import com.glimound.lottery.domain.strategy.model.aggregate.StrategyRich;
-import com.glimound.lottery.domain.strategy.model.req.DrawReq;
-import com.glimound.lottery.domain.strategy.model.res.DrawRes;
-import com.glimound.lottery.domain.strategy.repository.IStrategyRepository;
+import com.alibaba.fastjson.JSON;
 import com.glimound.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
-import com.glimound.lottery.domain.strategy.service.draw.DrawBase;
-import com.glimound.lottery.domain.strategy.service.draw.IDrawExec;
-import com.glimound.lottery.infrastructure.po.Award;
-import com.glimound.lottery.infrastructure.po.Strategy;
-import com.glimound.lottery.infrastructure.po.StrategyDetail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.glimound.lottery.domain.strategy.service.draw.AbstractDrawBase;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,34 +12,34 @@ import java.util.List;
  * @author Glimound
  */
 @Service("drawExec")
-public class DrawExec extends DrawBase implements IDrawExec {
-
-    private Logger logger = LoggerFactory.getLogger(DrawExec.class);
-
-    @Resource
-    private IStrategyRepository strategyRepository;
+@Slf4j
+public class DrawExec extends AbstractDrawBase {
 
     @Override
-    public DrawRes doDrawExec(DrawReq req) {
-        logger.info("执行策略抽奖开始，strategyId：{}", req.getStrategyId());
+    protected List<Long> getExcludeAwardIds(Long strategyId) {
+        List<Long> awardList = strategyRepository.listNoStockStrategyAwardById(strategyId);
+        log.info("执行抽奖策略 strategyId：{}，无库存排除奖品列表ID集合 awardList：{}", strategyId, JSON.toJSONString(awardList));
+        return awardList;
+    }
 
-        // 获取抽奖策略配置数据
-        StrategyRich strategyRich = strategyRepository.getStrategyRichById(req.getStrategyId());
-        Strategy strategy = strategyRich.getStrategy();
-        List<StrategyDetail> strategyDetailList = strategyRich.getStrategyDetailList();
+    @Override
+    protected Long drawAlgorithm(Long strategyId, IDrawAlgorithm drawAlgorithm, List<Long> excludeAwardIds) {
+        // 执行抽奖
+        Long awardId = drawAlgorithm.randomDraw(strategyId, excludeAwardIds);
 
-        // 校验和初始化数据
-        checkAndInitRateData(strategy.getStrategyId(), strategy.getStrategyMode(), strategyDetailList);
+        // 判断抽奖结果
+        if (awardId == null) {
+            return null;
+        }
 
-        // 根据策略方式抽奖
-        IDrawAlgorithm drawAlgorithm = drawAlgorithmMap.get(strategy.getStrategyMode());
-        Long awardId = drawAlgorithm.randomDraw(strategy.getStrategyId(), new ArrayList<>());
+        /*
+         * 扣减库存，暂时采用数据库行级锁的方式进行扣减库存，后续优化为 Redis 分布式锁扣减 decr/incr
+         * 注意：通常数据库直接锁行记录的方式并不能支撑较大体量的并发，但此种方式需要了解，
+         * 因为在分库分表下的正常数据流量下的个人数据记录中，是可以使用行级锁的，因为他只影响到自己的记录，不会影响到其他人
+         */
+        boolean isSuccess = strategyRepository.deductStockById(strategyId, awardId);
 
-        // 获取奖品信息
-        Award award = strategyRepository.getAwardById(awardId);
-
-        logger.info("执行策略抽奖完成，中奖用户：{} 奖品ID：{} 奖品名称：{}", req.getUId(), awardId, award.getAwardName());
-
-        return new DrawRes(req.getUId(), strategyRich.getStrategyId(), awardId, award.getAwardName());
+        // 返回结果，库存扣减成功返回奖品ID，否则返回null
+        return isSuccess ? awardId : null;
     }
 }
