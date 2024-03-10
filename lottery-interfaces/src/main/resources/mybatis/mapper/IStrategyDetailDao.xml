@@ -3,7 +3,7 @@
 <mapper namespace="com.glimound.lottery.infrastructure.dao.IStrategyDetailDao">
 
     <select id="listStrategyDetailById" resultType="strategyDetail">
-        SELECT id, strategy_id, award_id, award_count, award_rate, create_time, update_time
+        SELECT id, strategy_id, award_id, award_count, award_name, award_surplus_count, award_rate, create_time, update_time
         FROM lottery.strategy_detail
         WHERE strategy_id = #{strategyId}
     </select>

@@ -14,9 +14,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 public class AwardRateInfo {
-    // 奖品ID
+
+    /**
+     * 奖品ID
+     */
     private Long awardId;
 
-    // 中奖概率
+    /**
+     * 中奖概率
+     */
     private BigDecimal awardRate;
+
 }

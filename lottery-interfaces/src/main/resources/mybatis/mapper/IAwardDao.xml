@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.glimound.lottery.infrastructure.dao.IAwardDao">
     <select id="getAwardById" resultType="award">
-        SELECT id, award_id, award_type, award_count, award_name, award_content, create_time, update_time
+        SELECT id, award_id, award_type, award_name, award_content, create_time, update_time
         FROM lottery.award
         WHERE award_id = #{awardId}
     </select>

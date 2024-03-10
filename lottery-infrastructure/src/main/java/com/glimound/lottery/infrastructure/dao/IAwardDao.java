@@ -9,5 +9,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface IAwardDao {
 
+    /**
+     * 查询奖品信息
+     *
+     * @param awardId 奖品ID
+     * @return        奖品信息
+     */
     Award getAwardById(Long awardId);
 }

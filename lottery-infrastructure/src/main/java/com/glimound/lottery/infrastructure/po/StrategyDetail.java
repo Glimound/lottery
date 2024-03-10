@@ -36,6 +36,11 @@ public class StrategyDetail {
     private Integer awardCount;
 
     /**
+     * 奖品名称
+     */
+    private String awardName;
+
+    /**
      * 奖品剩余库存
      */
     private Integer awardSurplusCount;
