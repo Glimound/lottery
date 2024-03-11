@@ -4,12 +4,8 @@ import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.domain.strategy.model.aggregate.StrategyRich;
 import com.glimound.lottery.domain.strategy.model.req.DrawReq;
 import com.glimound.lottery.domain.strategy.model.res.DrawRes;
-import com.glimound.lottery.domain.strategy.model.vo.AwardRateInfo;
-import com.glimound.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import com.glimound.lottery.domain.strategy.model.vo.*;
 import com.glimound.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
-import com.glimound.lottery.infrastructure.po.Award;
-import com.glimound.lottery.infrastructure.po.Strategy;
-import com.glimound.lottery.infrastructure.po.StrategyDetail;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -26,10 +22,10 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
 
         // 1. 获取抽奖策略
         StrategyRich strategyRich = super.getStrategyRichById(req.getStrategyId());
-        Strategy strategy = strategyRich.getStrategy();
+        StrategyBriefVO strategy = strategyRich.getStrategy();
 
         // 2. 校验和初始化数据
-        List<StrategyDetail> strategyDetailList = strategyRich.getStrategyDetailList();
+        List<StrategyDetailBriefVO> strategyDetailList = strategyRich.getStrategyDetailList();
         this.checkAndInitRateData(strategy.getStrategyId(), strategy.getStrategyMode(), strategyDetailList);
 
         // 3. 获取不在抽奖范围内的列表，包括：奖品库存为空、风控策略、临时调整等
@@ -67,13 +63,13 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
      * @param strategyMode 抽奖策略模式
      * @param strategyDetailList 抽奖策略详情
      */
-    public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetail> strategyDetailList) {
+    public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetailBriefVO> strategyDetailList) {
         IDrawAlgorithm drawAlgorithm = drawAlgorithmGroup.get(strategyMode);
 
         // 若非单项概率算法，则无需初始化rateTuple，仅需初始化awardRateInfoMap即可
         if (!Constants.StrategyMode.SINGLE.getCode().equals(strategyMode)) {
             List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
-            for (StrategyDetail strategyDetail : strategyDetailList) {
+            for (StrategyDetailBriefVO strategyDetail : strategyDetailList) {
                 awardRateInfoList.add(new AwardRateInfo(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
             }
             drawAlgorithm.initAwardRateInfoMap(strategyId, awardRateInfoList);
@@ -86,7 +82,7 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         }
 
         List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
-        for (StrategyDetail strategyDetail : strategyDetailList) {
+        for (StrategyDetailBriefVO strategyDetail : strategyDetailList) {
             awardRateInfoList.add(new AwardRateInfo(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
         }
 
@@ -107,7 +103,7 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
             return new DrawRes(uId, strategyId, Constants.DrawState.FAIL.getCode());
         }
 
-        Award award = super.getAwardById(awardId);
+        AwardBriefVO award = super.getAwardById(awardId);
         DrawAwardInfo drawAwardInfo = new DrawAwardInfo(award.getAwardId(), award.getAwardName(), award.getAwardType(),
                 award.getAwardContent());
         log.info("执行策略抽奖完成【已中奖】，用户：{} 策略ID：{} 奖品ID：{} 奖品名称：{}", uId, strategyId, awardId, award.getAwardName());

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.glimound.lottery.infrastructure.dao.IStrategyDetailDao">
+    <insert id="insertStrategyDetailList">
+        INSERT INTO lottery.strategy_detail(strategy_id, award_id, award_count, award_rate, create_time, update_time, award_name, award_surplus_count)
+        VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (
+                    #{item.strategyId},
+                    #{item.awardId},
+                    #{item.awardCount},
+                    #{item.awardRate},
+                    NOW(),
+                    NOW(),
+                    #{item.awardName},
+                    #{item.awardSurplusCount}
+                )
+            </foreach>
+    </insert>
 
     <select id="listStrategyDetailById" resultType="strategyDetail">
         SELECT id, strategy_id, award_id, award_count, award_name, award_surplus_count, award_rate, create_time, update_time

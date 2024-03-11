@@ -1,8 +1,8 @@
 package com.glimound.lottery.domain.strategy.service.draw;
 
 import com.glimound.lottery.domain.strategy.model.aggregate.StrategyRich;
+import com.glimound.lottery.domain.strategy.model.vo.AwardBriefVO;
 import com.glimound.lottery.domain.strategy.repository.IStrategyRepository;
-import com.glimound.lottery.infrastructure.po.Award;
 
 import javax.annotation.Resource;
 
@@ -30,7 +30,7 @@ public abstract class DrawStrategySupport extends DrawConfig {
      * @param awardId 奖品ID
      * @return 中奖详情
      */
-    protected Award getAwardById(Long awardId){
+    protected AwardBriefVO getAwardById(Long awardId){
         return strategyRepository.getAwardById(awardId);
     }
 }

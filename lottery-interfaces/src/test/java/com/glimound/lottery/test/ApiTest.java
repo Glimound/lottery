@@ -34,7 +34,7 @@ public class ApiTest {
         activity.setTakeCount(10);
         activity.setState(0);
         activity.setCreator("test");
-        activityDao.insert(activity);
+        activityDao.insertActivity(activity);
     }
 
     @Test

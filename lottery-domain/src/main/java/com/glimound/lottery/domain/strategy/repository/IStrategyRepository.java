@@ -1,7 +1,7 @@
 package com.glimound.lottery.domain.strategy.repository;
 
 import com.glimound.lottery.domain.strategy.model.aggregate.StrategyRich;
-import com.glimound.lottery.infrastructure.po.Award;
+import com.glimound.lottery.domain.strategy.model.vo.AwardBriefVO;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public interface IStrategyRepository {
     StrategyRich getStrategyRichById(Long strategyId);
 
-    Award getAwardById(Long awardId);
+    AwardBriefVO getAwardById(Long awardId);
 
     List<Long> listNoStockStrategyAwardById(Long strategyId);
 

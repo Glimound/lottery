@@ -17,4 +17,10 @@ public interface IStrategyDao {
      */
     Strategy getStrategyById(Long strategyId);
 
+    /**
+     * 插入策略配置
+     *
+     * @param strategy 策略配置
+     */
+    void insertStrategy(Strategy strategy);
 }

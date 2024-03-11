@@ -1,4 +1,4 @@
-package com.glimound.lottery.test;
+package com.glimound.lottery.test.domain;
 
 import com.glimound.lottery.domain.strategy.model.vo.AwardRateInfo;
 import com.glimound.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;

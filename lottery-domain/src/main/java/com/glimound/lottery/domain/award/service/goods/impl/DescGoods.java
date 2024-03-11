@@ -24,9 +24,4 @@ public class DescGoods extends DistributionBase implements IDistributionGoods {
         return new DistributionRes(req.getUId(), Constants.AwardState.SUCCESS.getCode(),
                 Constants.AwardState.SUCCESS.getInfo());
     }
-
-    @Override
-    public Integer getDistributionGoodsName() {
-        return Constants.AwardType.DESC.getCode();
-    }
 }

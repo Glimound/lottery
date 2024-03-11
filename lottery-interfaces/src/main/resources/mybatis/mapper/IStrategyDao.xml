@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.glimound.lottery.infrastructure.dao.IStrategyDao">
+    <insert id="insertStrategy">
+        INSERT INTO lottery.strategy(strategy_id, strategy_desc, strategy_mode, grant_type, grant_date, ext_info, create_time, update_time)
+        VALUES (#{strategyId}, #{strategyDesc}, #{strategyMode}, #{grantType}, #{grantDate}, #{extInfo}, NOW(), NOW())
+    </insert>
+
     <select id="getStrategyById" resultType="strategy">
         SELECT id, strategy_id, strategy_desc, strategy_mode, grant_type, grant_date, ext_info, create_time, update_time
         FROM lottery.strategy

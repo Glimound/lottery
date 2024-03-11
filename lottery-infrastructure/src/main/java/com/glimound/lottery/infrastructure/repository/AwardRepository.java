@@ -1,4 +1,4 @@
-package com.glimound.lottery.domain.award.repository.impl;
+package com.glimound.lottery.infrastructure.repository;
 
 import com.glimound.lottery.domain.award.repository.IAwardRepository;
 import org.springframework.stereotype.Component;

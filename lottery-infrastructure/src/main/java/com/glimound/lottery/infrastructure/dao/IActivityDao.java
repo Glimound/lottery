@@ -1,5 +1,6 @@
 package com.glimound.lottery.infrastructure.dao;
 
+import com.glimound.lottery.domain.activity.model.vo.AlterStateVO;
 import com.glimound.lottery.infrastructure.po.Activity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,7 +15,7 @@ public interface IActivityDao {
      * 插入数据
      * @param activity 入参
      */
-    void insert(Activity activity);
+    void insertActivity(Activity activity);
 
     /**
      * 根据活动号查询活动信息
@@ -23,4 +24,12 @@ public interface IActivityDao {
      * @return           活动信息
      */
     Activity getActivityById(Long activityId);
+
+    /**
+     * 变更活动状态
+     *
+     * @param alterStateVO  [activityId、beforeState、afterState]
+     * @return 更新数量
+     */
+    int alterState(AlterStateVO alterStateVO);
 }

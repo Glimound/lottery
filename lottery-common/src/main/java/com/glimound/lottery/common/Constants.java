@@ -132,4 +132,43 @@ public class Constants {
             return info;
         }
     }
+
+    /**
+     * 活动状态：1编辑、2提审、3撤审、4通过、5运行(审核通过后worker扫描状态)、6拒绝、7关闭、8开启
+     */
+    public enum ActivityState {
+
+        EDIT(1, "编辑"),
+        ARRAIGNMENT(2, "提审"),
+        REVOKE(3, "撤审"),
+        PASS(4, "通过"),
+        DOING(5, "运行(活动中)"),
+        REFUSE(6, "拒绝"),
+        CLOSE(7, "关闭"),
+        OPEN(8, "开启");
+
+        private Integer code;
+        private String info;
+
+        ActivityState(Integer code, String info) {
+            this.code = code;
+            this.info = info;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getInfo() {
+            return info;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
+    }
 }

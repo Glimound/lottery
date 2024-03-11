@@ -1,7 +1,7 @@
 package com.glimound.lottery.domain.strategy.model.aggregate;
 
-import com.glimound.lottery.infrastructure.po.Strategy;
-import com.glimound.lottery.infrastructure.po.StrategyDetail;
+import com.glimound.lottery.domain.strategy.model.vo.StrategyBriefVO;
+import com.glimound.lottery.domain.strategy.model.vo.StrategyDetailBriefVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,11 +24,11 @@ public class StrategyRich {
     /**
      * 策略配置
      */
-    private Strategy strategy;
+    private StrategyBriefVO strategy;
 
     /**
      * 策略明细
      */
-    private List<StrategyDetail> strategyDetailList;
+    private List<StrategyDetailBriefVO> strategyDetailList;
 
 }
