@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.glimound.db.router.config.DataSourceAutoConfig
