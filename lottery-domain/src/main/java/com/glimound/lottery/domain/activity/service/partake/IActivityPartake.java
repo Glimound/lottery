@@ -1,5 +1,8 @@
 package com.glimound.lottery.domain.activity.service.partake;
 
+import com.glimound.lottery.domain.activity.model.req.PartakeReq;
+import com.glimound.lottery.domain.activity.model.res.PartakeRes;
+
 /**
  * 抽奖活动参与接口
  * @author Glimound
@@ -7,8 +10,10 @@ package com.glimound.lottery.domain.activity.service.partake;
 public interface IActivityPartake {
 
     /**
-     * TODO：待开发活动参与接口
+     * 参与活动
+     * @param req 入参
+     * @return    领取结果
      */
-    void doPartake();
+    PartakeRes doPartake(PartakeReq req);
 
 }

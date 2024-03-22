@@ -1,16 +1,11 @@
 package com.glimound.lottery.infrastructure.repository;
 
 import com.glimound.lottery.common.Constants;
+import com.glimound.lottery.domain.activity.model.req.PartakeReq;
 import com.glimound.lottery.domain.activity.model.vo.*;
 import com.glimound.lottery.domain.activity.repository.IActivityRepository;
-import com.glimound.lottery.infrastructure.dao.IActivityDao;
-import com.glimound.lottery.infrastructure.dao.IAwardDao;
-import com.glimound.lottery.infrastructure.dao.IStrategyDao;
-import com.glimound.lottery.infrastructure.dao.IStrategyDetailDao;
-import com.glimound.lottery.infrastructure.po.Activity;
-import com.glimound.lottery.infrastructure.po.Award;
-import com.glimound.lottery.infrastructure.po.Strategy;
-import com.glimound.lottery.infrastructure.po.StrategyDetail;
+import com.glimound.lottery.infrastructure.dao.*;
+import com.glimound.lottery.infrastructure.po.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +28,8 @@ public class ActivityRepository implements IActivityRepository {
     private IStrategyDao strategyDao;
     @Resource
     private IStrategyDetailDao strategyDetailDao;
+    @Resource
+    private IUserTakeActivityCountDao userTakeActivityCountDao;
 
 
     @Override
@@ -77,5 +74,30 @@ public class ActivityRepository implements IActivityRepository {
                 ((Constants.ActivityState) afterState).getCode());
         int count = activityDao.alterState(alterStateVO);
         return count == 1;
+    }
+
+    @Override
+    public ActivityBillVO getActivityBill(PartakeReq req) {
+        // 查询活动信息
+        Activity activity = activityDao.getActivityById(req.getActivityId());
+
+        // 查询领取次数
+        UserTakeActivityCount userTakeActivityCountReq = new UserTakeActivityCount();
+        userTakeActivityCountReq.setUId(req.getUId());
+        userTakeActivityCountReq.setActivityId(req.getActivityId());
+        UserTakeActivityCount userTakeActivityCount = userTakeActivityCountDao.getUserTakeActivityCount(userTakeActivityCountReq);
+
+        // 封装结果信息
+        ActivityBillVO activityBillVO = new ActivityBillVO();
+        BeanUtils.copyProperties(req, activityBillVO);
+        BeanUtils.copyProperties(activity, activityBillVO);
+        activityBillVO.setUserTakeLeftCount(userTakeActivityCount == null ? null : userTakeActivityCount.getLeftCount());
+
+        return activityBillVO;
+    }
+
+    @Override
+    public int deductActivityStockById(Long activityId) {
+        return activityDao.deductActivityStockById(activityId);
     }
 }

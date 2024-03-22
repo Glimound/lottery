@@ -18,7 +18,6 @@ public interface IUserStrategyExportDao {
      * @param userStrategyExport 用户策略
      */
     @DBRouter(key = "uId")
-
     void insertUserStrategyExport(UserStrategyExport userStrategyExport);
 
     /**

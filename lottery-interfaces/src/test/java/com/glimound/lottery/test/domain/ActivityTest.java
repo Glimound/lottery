@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.domain.activity.model.aggregates.ActivityConfigRich;
 import com.glimound.lottery.domain.activity.model.req.ActivityConfigReq;
+import com.glimound.lottery.domain.activity.model.req.PartakeReq;
+import com.glimound.lottery.domain.activity.model.res.PartakeRes;
 import com.glimound.lottery.domain.activity.model.vo.ActivityVO;
 import com.glimound.lottery.domain.activity.model.vo.AwardVO;
 import com.glimound.lottery.domain.activity.model.vo.StrategyDetailVO;
 import com.glimound.lottery.domain.activity.model.vo.StrategyVO;
 import com.glimound.lottery.domain.activity.service.deploy.IActivityDeploy;
+import com.glimound.lottery.domain.activity.service.partake.IActivityPartake;
 import com.glimound.lottery.domain.activity.service.stateflow.IStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -19,6 +22,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +36,10 @@ public class ActivityTest {
 
     @Resource
     private IActivityDeploy activityDeploy;
-
     @Resource
     private IStateHandler stateHandler;
+    @Resource
+    private IActivityPartake activityPartake;
 
     private ActivityConfigRich activityConfigRich;
 
@@ -165,5 +171,14 @@ public class ActivityTest {
         log.info("审核通过，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, Constants.ActivityState.ARRAIGNMENT)));
         log.info("运行活动，测试：{}", JSON.toJSONString(stateHandler.doing(100001L, Constants.ActivityState.PASS)));
         log.info("二次提审，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, Constants.ActivityState.EDIT)));
+    }
+
+    @Test
+    public void test_activityPartake() throws ParseException {
+        PartakeReq req = new PartakeReq("Uhdgkw766120d", 100001L,
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-03-15 12:30:05"));
+        PartakeRes res = activityPartake.doPartake(req);
+        log.info("请求参数：{}", JSON.toJSONString(req));
+        log.info("测试结果：{}", JSON.toJSONString(res));
     }
 }
