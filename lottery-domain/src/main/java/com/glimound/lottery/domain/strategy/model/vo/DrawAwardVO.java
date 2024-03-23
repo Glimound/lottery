@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DrawAwardInfo {
+public class DrawAwardVO {
 
     /**
      * 奖品ID

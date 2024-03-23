@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glimound.lottery.infrastructure.dao.IRuleTreeNodeLineDao">
+
+    <select id="listRuleTreeNodeLine" resultType="RuleTreeNodeLine">
+        SELECT id, tree_id, node_id_from, node_id_to, rule_limit_type, rule_limit_value
+        FROM lottery.rule_tree_node_line
+        WHERE tree_id = #{treeId} and node_id_from = #{nodeIdFrom}
+    </select>
+
+    <select id="getTreeNodeLineCountById" resultType="java.lang.Integer">
+        SELECT count(id)
+        FROM lottery.rule_tree_node_line
+        WHERE tree_id = {treeId}
+    </select>
+
+</mapper>

@@ -1,11 +1,10 @@
 package com.glimound.lottery.domain.strategy.service.algorithm;
 
-import com.glimound.lottery.domain.strategy.model.vo.AwardRateInfo;
+import com.glimound.lottery.domain.strategy.model.vo.AwardRateVO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,10 +26,10 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     protected Map<Long, Long[]> rateTupleMap = new ConcurrentHashMap<>();
 
     // 奖品区间概率值，strategyId -> [awardId & rate, awardId & rate]
-    protected Map<Long, List<AwardRateInfo>> awardRateInfoMap = new ConcurrentHashMap<>();
+    protected Map<Long, List<AwardRateVO>> awardRateInfoMap = new ConcurrentHashMap<>();
 
     @Override
-    public void initRateTuple(Long strategyId, List<AwardRateInfo> awardRateInfoList) {
+    public void initRateTuple(Long strategyId, List<AwardRateVO> awardRateInfoList) {
         initAwardRateInfoMap(strategyId, awardRateInfoList);
 
         // 若已有该key，返回value（对应的rateTuple）
@@ -38,7 +37,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
         Long[] rateTuple = rateTupleMap.computeIfAbsent(strategyId, k -> new Long[RATE_TUPLE_LENGTH]);
 
         int pos = 1;
-        for (AwardRateInfo awardRateInfo : awardRateInfoList) {
+        for (AwardRateVO awardRateInfo : awardRateInfoList) {
             int rateVal = awardRateInfo.getAwardRate().multiply(new BigDecimal(100)).intValue();
             // 将概率值对应范围内的数进行斐波那契散列运算
             for (int i = 0; i < rateVal; i++, pos++) {
@@ -48,7 +47,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     }
 
     @Override
-    public void initAwardRateInfoMap(Long strategyId, List<AwardRateInfo> awardRateInfoList) {
+    public void initAwardRateInfoMap(Long strategyId, List<AwardRateVO> awardRateInfoList) {
         awardRateInfoMap.put(strategyId, awardRateInfoList);
     }
 

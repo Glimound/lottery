@@ -7,7 +7,7 @@ import com.glimound.lottery.domain.activity.repository.IActivityRepository;
 import com.glimound.lottery.infrastructure.dao.*;
 import com.glimound.lottery.infrastructure.po.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
  * activity数据访问接口的实现
  * @author Glimound
  */
-@Component
+@Repository
 public class ActivityRepository implements IActivityRepository {
 
     @Resource

@@ -1,7 +1,7 @@
 package com.glimound.lottery.domain.strategy.model.res;
 
 import com.glimound.lottery.common.Constants;
-import com.glimound.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import com.glimound.lottery.domain.strategy.model.vo.DrawAwardVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class DrawRes {
     /**
      * 中奖奖品信息
      */
-    private DrawAwardInfo drawAwardInfo;
+    private DrawAwardVO drawAwardVO;
 
     public DrawRes(String uId, Long strategyId, Integer drawState) {
         this.uId = uId;

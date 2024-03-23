@@ -17,17 +17,17 @@ db-router:
       list: db01,db02
       db00:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true
+        url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=utf8
         username: root
         password: Wst030519
       db01:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery_01?useUnicode=true
+        url: jdbc:mysql://127.0.0.1:3306/lottery_01?useUnicode=true&characterEncoding=utf8
         username: root
         password: Wst030519
       db02:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery_02?useUnicode=true
+        url: jdbc:mysql://127.0.0.1:3306/lottery_02?useUnicode=true&characterEncoding=utf8
         username: root
         password: Wst030519
 

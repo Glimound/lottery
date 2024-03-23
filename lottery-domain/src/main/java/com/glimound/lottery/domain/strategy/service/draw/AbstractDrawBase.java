@@ -68,9 +68,9 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
 
         // 若非单项概率算法，则无需初始化rateTuple，仅需初始化awardRateInfoMap即可
         if (!Constants.StrategyMode.SINGLE.getCode().equals(strategyMode)) {
-            List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
+            List<AwardRateVO> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
             for (StrategyDetailBriefVO strategyDetail : strategyDetailList) {
-                awardRateInfoList.add(new AwardRateInfo(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
+                awardRateInfoList.add(new AwardRateVO(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
             }
             drawAlgorithm.initAwardRateInfoMap(strategyId, awardRateInfoList);
             return;
@@ -81,9 +81,9 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
             return;
         }
 
-        List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
+        List<AwardRateVO> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
         for (StrategyDetailBriefVO strategyDetail : strategyDetailList) {
-            awardRateInfoList.add(new AwardRateInfo(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
+            awardRateInfoList.add(new AwardRateVO(strategyDetail.getAwardId(), strategyDetail.getAwardRate()));
         }
 
         drawAlgorithm.initRateTuple(strategyId, awardRateInfoList);
@@ -104,7 +104,7 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         }
 
         AwardBriefVO award = super.getAwardById(awardId);
-        DrawAwardInfo drawAwardInfo = new DrawAwardInfo(award.getAwardId(), award.getAwardName(), award.getAwardType(),
+        DrawAwardVO drawAwardInfo = new DrawAwardVO(award.getAwardId(), award.getAwardName(), award.getAwardType(),
                 award.getAwardContent(), strategy.getStrategyMode(), strategy.getGrantType(), strategy.getGrantDate());
         log.info("执行策略抽奖完成【已中奖】，用户：{} 策略ID：{} 奖品ID：{} 奖品名称：{}", uId, strategyId, awardId, award.getAwardName());
 

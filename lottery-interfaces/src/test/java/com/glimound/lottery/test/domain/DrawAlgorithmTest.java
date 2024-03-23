@@ -1,6 +1,6 @@
 package com.glimound.lottery.test.domain;
 
-import com.glimound.lottery.domain.strategy.model.vo.AwardRateInfo;
+import com.glimound.lottery.domain.strategy.model.vo.AwardRateVO;
 import com.glimound.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,12 +24,12 @@ public class DrawAlgorithmTest {
     @Before
     public void init() {
         // 奖品信息
-        List<AwardRateInfo> strategyList = new ArrayList<>();
-        strategyList.add(new AwardRateInfo(1L, new BigDecimal("0.05")));
-        strategyList.add(new AwardRateInfo(2L, new BigDecimal("0.15")));
-        strategyList.add(new AwardRateInfo(3L, new BigDecimal("0.20")));
-        strategyList.add(new AwardRateInfo(4L, new BigDecimal("0.25")));
-        strategyList.add(new AwardRateInfo(5L, new BigDecimal("0.35")));
+        List<AwardRateVO> strategyList = new ArrayList<>();
+        strategyList.add(new AwardRateVO(1L, new BigDecimal("0.05")));
+        strategyList.add(new AwardRateVO(2L, new BigDecimal("0.15")));
+        strategyList.add(new AwardRateVO(3L, new BigDecimal("0.20")));
+        strategyList.add(new AwardRateVO(4L, new BigDecimal("0.25")));
+        strategyList.add(new AwardRateVO(5L, new BigDecimal("0.35")));
 
         // 初始数据
         randomDrawAlgorithm.initRateTuple(100001L, strategyList);

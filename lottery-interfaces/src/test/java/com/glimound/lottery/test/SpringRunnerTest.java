@@ -6,7 +6,7 @@ import com.glimound.lottery.domain.strategy.model.req.DrawReq;
 import com.glimound.lottery.domain.award.model.req.GoodsReq;
 import com.glimound.lottery.domain.award.model.res.DistributionRes;
 import com.glimound.lottery.domain.strategy.model.res.DrawRes;
-import com.glimound.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import com.glimound.lottery.domain.strategy.model.vo.DrawAwardVO;
 import com.glimound.lottery.domain.strategy.service.draw.IDrawExec;
 import com.glimound.lottery.domain.award.service.factory.DistributionGoodsFactory;
 import com.glimound.lottery.domain.award.service.goods.IDistributionGoods;
@@ -76,12 +76,12 @@ public class SpringRunnerTest {
         // 判断抽奖结果
         Integer drawState = drawRes.getDrawState();
         if (Constants.DrawState.FAIL.getCode().equals(drawState)) {
-            log.info("未中奖 DrawAwardInfo is null");
+            log.info("未中奖 DrawAwardVO is null");
             return;
         }
 
         // 封装发奖参数，orderId：2109313442431 为模拟ID，需要在用户参与领奖活动时生成
-        DrawAwardInfo drawAwardInfo = drawRes.getDrawAwardInfo();
+        DrawAwardVO drawAwardInfo = drawRes.getDrawAwardVO();
         GoodsReq goodsReq = new GoodsReq(drawRes.getUId(), "2109313442431", drawAwardInfo.getAwardId(),
                 drawAwardInfo.getAwardName(), drawAwardInfo.getAwardContent());
 
