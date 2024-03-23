@@ -33,7 +33,7 @@ public class UserStrategyExport {
     /** 发奖状态 */
     private Integer grantState;
     /** 发奖ID */
-    private Long     awardId;
+    private Long awardId;
     /** 奖品类型（1:文字描述、2:兑换码、3:优惠券、4:实物奖品） */
     private Integer awardType;
     /** 奖品名称 */

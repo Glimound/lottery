@@ -1,11 +1,11 @@
 package com.glimound.lottery.infrastructure.repository;
 
-import com.glimound.lottery.domain.award.repository.IAwardRepository;
+import com.glimound.lottery.domain.award.repository.IOrderRepository;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Glimound
  */
 @Component
-public class AwardRepository implements IAwardRepository {
+public class OrderRepository implements IOrderRepository {
 }

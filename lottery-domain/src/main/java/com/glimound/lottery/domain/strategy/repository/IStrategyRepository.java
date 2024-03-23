@@ -9,10 +9,29 @@ import java.util.List;
  * @author Glimound
  */
 public interface IStrategyRepository {
+
+    /**
+     * 查询策略信息
+     *
+     * @param strategyId 策略ID
+     * @return           策略信息
+     */
     StrategyRich getStrategyRichById(Long strategyId);
 
+    /**
+     * 查询奖励配置
+     *
+     * @param awardId   奖励ID
+     * @return          奖励信息
+     */
     AwardBriefVO getAwardById(Long awardId);
 
+    /**
+     * 查询无库存奖品
+     *
+     * @param strategyId 策略ID
+     * @return           无库存奖品
+     */
     List<Long> listNoStockStrategyAwardById(Long strategyId);
 
     /**

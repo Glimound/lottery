@@ -5,14 +5,31 @@ import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
 import com.glimound.lottery.domain.activity.model.res.PartakeRes;
 import com.glimound.lottery.domain.activity.model.vo.ActivityBillVO;
+import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
+import com.glimound.lottery.domain.support.ids.IIdGenerator;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 活动领取模板抽象类
  * @author Glimound
  */
 public abstract class BaseActivityPartake extends ActivityPartakeSupport implements IActivityPartake {
+
+    @Resource
+    private Map<Constants.Ids, IIdGenerator> idGeneratorMap;
+
     @Override
     public PartakeRes doPartake(PartakeReq req) {
+
+        // 查询是否存在未执行抽奖领取活动单【user_take_activity 存在 state = 0，领取了但抽奖过程失败的，可以直接返回领取结果继续抽奖】
+        UserTakeActivityVO userTakeActivityVO = this.getNoConsumedTakeActivityOrder(req.getActivityId(), req.getUId());
+        if (null != userTakeActivityVO) {
+            return new PartakeRes(Constants.ResponseCode.SUCCESS.getCode(), Constants.ResponseCode.SUCCESS.getInfo(),
+                    userTakeActivityVO.getStrategyId(), userTakeActivityVO.getTakeId());
+        }
+
         // 查询活动账单
         ActivityBillVO activityBillVO = super.getActivityBill(req);
 
@@ -28,17 +45,26 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
             return new PartakeRes(deductActivityResult.getCode(), deductActivityResult.getInfo());
         }
 
-        // 领取活动信息【个人用户把活动信息写入到用户表】
-        Result grabResult = this.grabActivity(req, activityBillVO);
+        // 插入领取活动信息【个人用户把活动信息写入到用户表】
+        Long takeId = idGeneratorMap.get(Constants.Ids.SnowFlake).nextId();
+        Result grabResult = this.grabActivity(req, activityBillVO, takeId);
         if (!Constants.ResponseCode.SUCCESS.getCode().equals(grabResult.getCode())) {
             return new PartakeRes(grabResult.getCode(), grabResult.getInfo());
         }
 
-        // 封装结果【返回的策略ID，用于继续完成抽奖步骤】
-        PartakeRes partakeResult = new PartakeRes(Constants.ResponseCode.SUCCESS.getCode(), Constants.ResponseCode.SUCCESS.getInfo());
-        partakeResult.setStrategyId(activityBillVO.getStrategyId());
-        return partakeResult;
+        // 封装结果
+        return new PartakeRes(Constants.ResponseCode.SUCCESS.getCode(), Constants.ResponseCode.SUCCESS.getInfo(),
+                activityBillVO.getStrategyId(), takeId);
     }
+
+    /**
+     * 查询是否存在未执行抽奖领取活动单【user_take_activity 存在 state = 0，领取了但抽奖过程失败的，可以直接返回领取结果继续抽奖】
+     *
+     * @param activityId 活动ID
+     * @param uId        用户ID
+     * @return 领取单
+     */
+    protected abstract UserTakeActivityVO getNoConsumedTakeActivityOrder(Long activityId, String uId);
 
     /**
      * 活动信息校验处理，把活动库存、状态、日期、个人参与次数
@@ -62,7 +88,8 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
      *
      * @param partake 参与活动请求
      * @param bill    活动账单
+     * @param takeId  领取活动ID
      * @return 领取结果
      */
-    protected abstract Result grabActivity(PartakeReq partake, ActivityBillVO bill);
+    protected abstract Result grabActivity(PartakeReq partake, ActivityBillVO bill, Long takeId);
 }
