@@ -17,7 +17,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DrawAlgorithmTest {
-    //@Resource(name = "entiretyRateRandomDrawAlgorithm")
+//    @Resource(name = "entiretyRateRandomDrawAlgorithm")
     @Resource(name = "singleRateRandomDrawAlgorithm")
     private IDrawAlgorithm randomDrawAlgorithm;
 
@@ -32,7 +32,8 @@ public class DrawAlgorithmTest {
         strategyList.add(new AwardRateVO(5L, new BigDecimal("0.35")));
 
         // 初始数据
-        randomDrawAlgorithm.initRateTuple(100001L, strategyList);
+        randomDrawAlgorithm.initAwardRateInfoMap(100001L, strategyList);
+        randomDrawAlgorithm.initializeIfAbsent(100001L, strategyList);
     }
 
     @Test
@@ -40,10 +41,10 @@ public class DrawAlgorithmTest {
 
         List<Long> excludeAwardIds = new ArrayList<>();
         HashMap<Long, Integer> count = new HashMap<>();
-        excludeAwardIds.add(2L);
         excludeAwardIds.add(4L);
+        excludeAwardIds.add(5L);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100000; i++) {
             Long awardId = randomDrawAlgorithm.randomDraw(100001L, excludeAwardIds);
             System.out.println("中奖结果：" + awardId);
             count.put(awardId, count.computeIfAbsent(awardId, k -> 0) + 1);

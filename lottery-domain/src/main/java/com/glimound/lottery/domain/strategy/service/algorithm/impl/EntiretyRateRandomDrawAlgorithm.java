@@ -5,27 +5,32 @@ import com.glimound.lottery.domain.strategy.service.algorithm.BaseAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 总体概率抽奖：排除已抽空的奖项，剩余奖项按照比例重新计算概率
+ * 无需初始化，采样复杂度O(n)
  * @author Glimound
  */
 @Component("entiretyRateRandomDrawAlgorithm")
 public class EntiretyRateRandomDrawAlgorithm extends BaseAlgorithm {
+
+    /** 无需初始化 */
+    @Override
+    public void initializeIfAbsent(Long strategyId, List<AwardRateVO> awardRateInfoList) { }
+
     @Override
     public Long randomDraw(Long strategyId, List<Long> excludeAwardIds) {
 
         List<AwardRateVO> availableAwards = new ArrayList<>();
-        BigDecimal rateDenominator = BigDecimal.ZERO;
+        BigDecimal rateNew = BigDecimal.ZERO;
 
-        // 排除不可被抽中的奖项，并重新计算总概率的分母
+        // 排除不可被抽中的奖项，并重新计算总概率
         for (AwardRateVO awardRateVO : awardRateInfoMap.get(strategyId)) {
             if (!excludeAwardIds.contains(awardRateVO.getAwardId())) {
                 availableAwards.add(awardRateVO);
-                rateDenominator = rateDenominator.add(awardRateVO.getAwardRate());
+                rateNew = rateNew.add(awardRateVO.getAwardRate());
             }
         }
 
@@ -36,16 +41,14 @@ public class EntiretyRateRandomDrawAlgorithm extends BaseAlgorithm {
             return availableAwards.get(0).getAwardId();
         }
 
-        // 获取1~100的随机数
-        int randomVal = this.generateSecureRandomIntCode(100);
+        // 获取0~rateNew的随机数
+        BigDecimal randomVal = BigDecimal.valueOf(this.generateSecureRandomDoubleCode()).multiply(rateNew);
 
-        int rateSum = 0;
-        for (AwardRateVO awardRateVO : availableAwards) {
-            int rateVal = awardRateVO.getAwardRate().divide(rateDenominator, 2, RoundingMode.UP)
-                    .multiply(new BigDecimal(100)).intValue();
-            rateSum += rateVal;
-            if (randomVal <= rateSum) {
-                return awardRateVO.getAwardId();
+        BigDecimal rateSum = BigDecimal.ZERO;
+        for (int i = 0; i < availableAwards.size(); i++) {
+            rateSum = rateSum.add(availableAwards.get(i).getAwardRate());
+            if (randomVal.compareTo(rateSum) < 0) {
+                return availableAwards.get(i).getAwardId();
             }
         }
 
