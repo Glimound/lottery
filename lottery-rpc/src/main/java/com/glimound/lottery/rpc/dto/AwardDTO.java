@@ -1,24 +1,29 @@
-package com.glimound.lottery.domain.strategy.model.vo;
+package com.glimound.lottery.rpc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 中奖奖品信息
+ * 奖品信息
  * @author Glimound
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DrawAwardVO {
-
+public class AwardDTO implements Serializable {
     /**
      * 用户ID
      */
     private String uId;
+
+    /**
+     * 活动ID
+     */
+    private Long activityId;
 
     /**
      * 奖品ID
@@ -26,14 +31,14 @@ public class DrawAwardVO {
     private Long awardId;
 
     /**
-     * 奖品名称
-     */
-    private String awardName;
-
-    /**
      * 奖品类型（1:文字描述、2:兑换码、3:优惠券、4:实物奖品）
      */
     private Integer awardType;
+
+    /**
+     * 奖品名称
+     */
+    private String awardName;
 
     /**
      * 奖品内容「描述、奖品码、sku」
@@ -49,10 +54,8 @@ public class DrawAwardVO {
      * 发放奖品方式（1:即时、2:定时[含活动结束]、3:人工）
      */
     private Integer grantType;
-
     /**
      * 发奖时间
      */
     private Date grantDate;
-
 }

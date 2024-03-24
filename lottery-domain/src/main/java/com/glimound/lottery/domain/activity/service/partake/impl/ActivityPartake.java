@@ -85,7 +85,7 @@ public class ActivityPartake extends BaseActivityPartake {
                 try {
                     // 扣减个人已参与次数
                     int updateCount = userTakeActivityRepository.deductLeftCount(bill.getActivityId(), bill.getActivityName(),
-                            bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getUId(), partake.getPartakeDate());
+                            bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getUId());
                     if (updateCount == 0) {
                         status.setRollbackOnly();
                         log.error("领取活动，扣减个人已参与次数失败 activityId：{} uId：{}", partake.getActivityId(), partake.getUId());

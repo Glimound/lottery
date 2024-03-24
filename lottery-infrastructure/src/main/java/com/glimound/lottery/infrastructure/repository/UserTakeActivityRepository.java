@@ -31,7 +31,7 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
     private IUserStrategyExportDao userStrategyExportDao;
 
     @Override
-    public int deductLeftCount(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId, Date partakeDate) {
+    public int deductLeftCount(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId) {
         if (userTakeLeftCount == null) {
             UserTakeActivityCount userTakeActivityCount = new UserTakeActivityCount();
             userTakeActivityCount.setUId(uId);

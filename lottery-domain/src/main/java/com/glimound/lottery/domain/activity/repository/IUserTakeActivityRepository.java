@@ -22,7 +22,7 @@ public interface IUserTakeActivityRepository {
      * @param partakeDate       领取时间
      * @return                  更新结果
      */
-    int deductLeftCount(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId, Date partakeDate);
+    int deductLeftCount(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId);
 
     /**
      * 领取活动

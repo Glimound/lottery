@@ -15,9 +15,9 @@ public class DrawProcessRes extends Result {
         super(code, info);
     }
 
-    public DrawProcessRes(String code, String info, DrawAwardVO drawAwardInfo) {
+    public DrawProcessRes(String code, String info, DrawAwardVO drawAwardVO) {
         super(code, info);
-        this.drawAwardVO = drawAwardInfo;
+        this.drawAwardVO = drawAwardVO;
     }
 
     public DrawAwardVO getDrawAwardVO() {
