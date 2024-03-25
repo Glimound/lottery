@@ -23,7 +23,7 @@ public class ActivityProcessTest {
     private IActivityProcess activityProcess;
 
     @Test
-    public void test_doDrawProcess() throws ParseException {
+    public void test_doDrawProcess() throws ParseException, InterruptedException {
         DrawProcessReq req = new DrawProcessReq("glimound", 100001L,
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-03-15 12:30:05"));
 
@@ -31,6 +31,7 @@ public class ActivityProcessTest {
 
         log.info("请求入参：{}", JSON.toJSONString(req));
         log.info("测试结果：{}", JSON.toJSONString(drawProcessRes));
+        Thread.sleep(100);
     }
 
 }
