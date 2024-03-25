@@ -18,8 +18,7 @@ public class DescGoods extends DistributionBase implements IDistributionGoods {
     @Override
     public DistributionRes doDistribution(GoodsReq req) {
         // 更新用户领奖结果
-        super.updateUserAwardState(req.getUId(), req.getOrderId(), req.getAwardId(),
-                Constants.AwardState.SUCCESS.getCode(), Constants.AwardState.SUCCESS.getInfo());
+        super.updateUserAwardState(req.getUId(), req.getOrderId(), req.getAwardId(), Constants.GrantState.COMPLETE.getCode());
 
         return new DistributionRes(req.getUId(), Constants.AwardState.SUCCESS.getCode(),
                 Constants.AwardState.SUCCESS.getInfo());

@@ -134,6 +134,10 @@ public class ActivityPartake extends BaseActivityPartake {
         } finally {
             dbRouter.clear();
         }
+    }
 
+    @Override
+    public void updateMqState(String uId, Long orderId, Integer mqState) {
+        userTakeActivityRepository.updateMqState(uId, orderId, mqState);
     }
 }

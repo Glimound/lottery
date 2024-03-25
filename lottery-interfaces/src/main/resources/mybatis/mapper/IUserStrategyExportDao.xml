@@ -11,6 +11,18 @@
              #{grantState}, #{awardId}, #{awardType}, #{awardName}, #{awardContent}, #{uuid}, now(), now())
     </insert>
 
+    <update id="updateAwardGrantState">
+        UPDATE user_strategy_export
+        SET grant_state = #{grantState}, grant_date = now(), update_time = now()
+        WHERE u_id = #{uId} AND order_id = #{orderId} AND award_id = #{awardId}
+    </update>
+
+    <update id="updateMqState">
+        UPDATE user_strategy_export
+        SET mq_state = #{mqState}, update_time = now()
+        WHERE u_id = #{uId} AND order_id = #{orderId}
+    </update>
+
     <select id="getUserStrategyExportByUId" resultType="UserStrategyExport">
         SELECT id, u_id, activity_id, order_id, strategy_id, strategy_mode, grant_type, grant_date, grant_state,
                award_id, award_type, award_name, award_content, uuid, create_time, update_time
