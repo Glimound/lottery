@@ -62,4 +62,10 @@ public class ActivityDeployImpl implements IActivityDeploy {
     public void updateActivity(ActivityConfigReq req) {
 
     }
+
+    @Override
+    public List<ActivityVO> scanToDoActivity(Long id) {
+        return activityRepository.listToDoActivity(id);
+    }
+
 }

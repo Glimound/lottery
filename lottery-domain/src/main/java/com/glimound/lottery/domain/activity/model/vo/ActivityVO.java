@@ -16,6 +16,11 @@ import java.util.Date;
 public class ActivityVO {
 
     /**
+     * 自增ID
+     */
+    private Long id;
+
+    /**
      * 活动ID
      */
     private Long activityId;

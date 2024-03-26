@@ -27,4 +27,12 @@
         FROM lottery.activity
         WHERE activity_id = #{activityId}
     </select>
+    <select id="listToDoActivity" resultType="Activity">
+        SELECT id, activity_id, activity_name, begin_date_time, end_date_time, state, creator
+        FROM lottery.activity
+        WHERE id > #{id} AND state in (4,5)
+        ORDER BY ID ASC
+        LIMIT 10
+    </select>
+
 </mapper>

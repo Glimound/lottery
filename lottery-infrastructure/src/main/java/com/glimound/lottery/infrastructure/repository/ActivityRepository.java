@@ -100,4 +100,16 @@ public class ActivityRepository implements IActivityRepository {
     public int deductActivityStockById(Long activityId) {
         return activityDao.deductActivityStockById(activityId);
     }
+
+    @Override
+    public List<ActivityVO> listToDoActivity(Long id) {
+        List<Activity> activityList = activityDao.listToDoActivity(id);
+        List<ActivityVO> activityVOList = new ArrayList<>(activityList.size());
+        for (Activity activity : activityList) {
+            ActivityVO activityVO = new ActivityVO();
+            BeanUtils.copyProperties(activity, activityVO);
+            activityVOList.add(activityVO);
+        }
+        return activityVOList;
+    }
 }
