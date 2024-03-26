@@ -1,9 +1,11 @@
 package com.glimound.lottery.domain.activity.repository;
 
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
+import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
 import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户参与活动仓储接口
@@ -72,6 +74,11 @@ public interface IUserTakeActivityRepository {
      */
     void updateMqState(String uId, Long orderId, Integer mqState);
 
-
+    /**
+     * 扫描发货单 MQ 状态，列出发送失败/长时间未发送的发货单
+     *
+     * @return 发货单
+     */
+    List<InvoiceVO> listFailureMqState();
 
 }

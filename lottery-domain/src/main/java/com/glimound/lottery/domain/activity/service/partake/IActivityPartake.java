@@ -4,6 +4,9 @@ import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
 import com.glimound.lottery.domain.activity.model.res.PartakeRes;
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
+import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
+
+import java.util.List;
 
 /**
  * 抽奖活动参与接口
@@ -33,5 +36,13 @@ public interface IActivityPartake {
      */
     void updateMqState(String uId, Long orderId, Integer mqState);
 
+    /**
+     * 扫描发货单 MQ 状态，把未发送 MQ 的单子扫描出来，做补偿
+     *
+     * @param dbCount 指定分库
+     * @param tbCount 指定分表
+     * @return 发货单
+     */
+    List<InvoiceVO> listFailureMqState(int dbCount, int tbCount);
 
 }

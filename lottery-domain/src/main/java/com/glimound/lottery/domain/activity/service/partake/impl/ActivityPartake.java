@@ -6,6 +6,7 @@ import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
 import com.glimound.lottery.domain.activity.model.vo.ActivityBillVO;
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
+import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
 import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
 import com.glimound.lottery.domain.activity.repository.IUserTakeActivityRepository;
 import com.glimound.lottery.domain.activity.service.partake.BaseActivityPartake;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 活动参与功能实现
@@ -139,5 +141,18 @@ public class ActivityPartake extends BaseActivityPartake {
     @Override
     public void updateMqState(String uId, Long orderId, Integer mqState) {
         userTakeActivityRepository.updateMqState(uId, orderId, mqState);
+    }
+
+    @Override
+    public List<InvoiceVO> listFailureMqState(int dbCount, int tbCount) {
+        try {
+            // 设置路由
+            dbRouter.setDbKey(dbCount);
+            dbRouter.setTbKey(tbCount);
+            // 查询数据
+            return userTakeActivityRepository.listFailureMqState();
+        } finally {
+            dbRouter.clear();
+        }
     }
 }

@@ -30,4 +30,9 @@
         WHERE u_id = #{uId}
     </select>
 
+    <select id="listFailureMqState" resultType="UserStrategyExport">
+        SELECT u_id, order_id, award_id, award_type, award_name, award_content
+        FROM user_strategy_export
+        WHERE mq_state = 2 OR ( mq_state = 0 AND now() - create_time > 10000 )
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.glimound.lottery.infrastructure.repository;
 
 import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
+import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
 import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
 import com.glimound.lottery.domain.activity.repository.IUserTakeActivityRepository;
 import com.glimound.lottery.infrastructure.dao.IUserStrategyExportDao;
@@ -14,7 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户参与活动仓储
@@ -113,6 +116,20 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
         userStrategyExport.setOrderId(orderId);
         userStrategyExport.setMqState(mqState);
         userStrategyExportDao.updateMqState(userStrategyExport);
+    }
+
+    @Override
+    public List<InvoiceVO> listFailureMqState() {
+        // 查询发送MQ失败和超时10秒未发送MQ的数据
+        List<UserStrategyExport> userStrategyExportList = userStrategyExportDao.listFailureMqState();
+        // 转换对象
+        List<InvoiceVO> invoiceVOList = new ArrayList<>(userStrategyExportList.size());
+        for (UserStrategyExport userStrategyExport : userStrategyExportList) {
+            InvoiceVO invoiceVO = new InvoiceVO();
+            BeanUtils.copyProperties(userStrategyExport, invoiceVO);
+            invoiceVOList.add(invoiceVO);
+        }
+        return invoiceVOList;
     }
 
 }
