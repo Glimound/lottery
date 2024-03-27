@@ -18,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -36,9 +35,9 @@ public class LotteryActivityBooth implements ILotteryActivityBooth {
         try {
             log.info("抽奖，开始 uId：{} activityId：{}", drawReq.getUId(), drawReq.getActivityId());
 
-            // 1. 执行抽奖 TODO: 后续修改为当前时间
+            // 1. 执行抽奖
             DrawProcessRes drawProcessRes = activityProcess.doDrawProcess(
-                    new DrawProcessReq(drawReq.getUId(), drawReq.getActivityId(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-03-15 12:30:05")));
+                    new DrawProcessReq(drawReq.getUId(), drawReq.getActivityId(), new Date()));
             if (!Constants.ResponseCode.SUCCESS.getCode().equals(drawProcessRes.getCode())) {
                 log.error("抽奖，失败(抽奖过程异常) uId：{} activityId：{}", drawReq.getUId(), drawReq.getActivityId());
                 return new DrawRes(drawProcessRes.getCode(), drawProcessRes.getInfo());
@@ -76,10 +75,10 @@ public class LotteryActivityBooth implements ILotteryActivityBooth {
                 return new DrawRes(ruleQuantificationCrowdRes.getCode(), ruleQuantificationCrowdRes.getInfo());
             }
 
-            // 2. 执行抽奖 TODO: 后续修改为当前时间
+            // 2. 执行抽奖
             Long activityId = ruleQuantificationCrowdRes.getActivityId();
             DrawProcessRes drawProcessRes = activityProcess.doDrawProcess(
-                    new DrawProcessReq(quantificationDrawReq.getUId(), activityId, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-03-15 12:30:05")));
+                    new DrawProcessReq(quantificationDrawReq.getUId(), activityId, new Date()));
             if (!Constants.ResponseCode.SUCCESS.getCode().equals(drawProcessRes.getCode())) {
                 log.error("量化人群抽奖，失败(抽奖过程异常) uId：{} treeId：{}", quantificationDrawReq.getUId(), quantificationDrawReq.getTreeId());
                 return new DrawRes(drawProcessRes.getCode(), drawProcessRes.getInfo());
