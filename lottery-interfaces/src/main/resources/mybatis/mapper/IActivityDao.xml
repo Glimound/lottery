@@ -21,12 +21,18 @@
         WHERE activity_id = #{activityId} AND stock_surplus_count > 0
     </update>
 
+    <update id="updateActivityStock">
+        UPDATE lottery.activity SET stock_surplus_count = #{stockSurplusCount}
+        WHERE activity_id = #{activityId} AND stock_surplus_count > #{stockSurplusCount}
+    </update>
+
     <select id="getActivityById" resultType="activity">
         SELECT id, activity_id, activity_name, activity_desc, begin_date_time, end_date_time, stock_count,
                stock_surplus_count, take_count, strategy_id, state, creator, create_time, update_time
         FROM lottery.activity
         WHERE activity_id = #{activityId}
     </select>
+
     <select id="listToDoActivity" resultType="Activity">
         SELECT id, activity_id, activity_name, begin_date_time, end_date_time, state, creator
         FROM lottery.activity

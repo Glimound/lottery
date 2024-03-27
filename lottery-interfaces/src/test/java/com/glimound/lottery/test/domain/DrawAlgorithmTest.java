@@ -25,9 +25,9 @@ public class DrawAlgorithmTest {
     public void init() {
         // 奖品信息
         List<AwardRateVO> strategyList = new ArrayList<>();
-        strategyList.add(new AwardRateVO(1L, new BigDecimal("0.05")));
-        strategyList.add(new AwardRateVO(2L, new BigDecimal("0.15")));
-        strategyList.add(new AwardRateVO(3L, new BigDecimal("0.20")));
+        strategyList.add(new AwardRateVO(1L, new BigDecimal("0.00001")));
+        strategyList.add(new AwardRateVO(2L, new BigDecimal("0.14999")));
+        strategyList.add(new AwardRateVO(3L, new BigDecimal("0.25")));
         strategyList.add(new AwardRateVO(4L, new BigDecimal("0.25")));
         strategyList.add(new AwardRateVO(5L, new BigDecimal("0.35")));
 

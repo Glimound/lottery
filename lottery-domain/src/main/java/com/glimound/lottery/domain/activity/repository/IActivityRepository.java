@@ -1,7 +1,9 @@
 package com.glimound.lottery.domain.activity.repository;
 
 import com.glimound.lottery.common.Constants;
+import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
+import com.glimound.lottery.domain.activity.model.res.StockRes;
 import com.glimound.lottery.domain.activity.model.vo.*;
 
 import java.util.List;
@@ -46,6 +48,12 @@ public interface IActivityRepository {
     boolean alterStatus(Long activityId, Enum<Constants.ActivityState> beforeState, Enum<Constants.ActivityState> afterState);
 
     /**
+     * 将对应活动的库存信息刷入缓存
+     * @param activityId 活动ID
+     */
+    void addStockCountToRedis(Long activityId);
+
+    /**
      * 查询活动账单信息【库存、状态、日期、个人参与次数】
      * @param req 参与活动请求
      * @return    活动账单
@@ -66,6 +74,22 @@ public interface IActivityRepository {
      * @return 待处理的活动集合
      */
     List<ActivityVO> listToDoActivity(Long id);
+
+    /**
+     * 扣减活动库存，通过Redis
+     *
+     * @param uId        用户ID
+     * @param activityId 活动ID
+     * @return 扣减结果
+     */
+    StockRes deductActivityStockByRedis(String uId, Long activityId);
+
+    /**
+     * 恢复活动库存，通过Redis
+     */
+    void recoverActivityStockByRedis(Long activityId);
+
+    Integer getActivityStockByRedis(Long activityId);
 
 
 }

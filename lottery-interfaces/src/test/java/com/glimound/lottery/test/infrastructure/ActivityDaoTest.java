@@ -1,4 +1,4 @@
-package com.glimound.lottery.test.dao;
+package com.glimound.lottery.test.infrastructure;
 
 import com.alibaba.fastjson.JSON;
 import com.glimound.lottery.infrastructure.dao.IActivityDao;

@@ -42,6 +42,20 @@ public class Constants {
         public static final int ENUM = 6;
     }
 
+    /**
+     * 缓存 Key
+     */
+    public static final class RedisKey {
+
+        // 抽奖活动库存 Key
+        private static final String LOTTERY_ACTIVITY_STOCK_COUNT = "lottery_activity_stock_count";
+
+        public static String KEY_LOTTERY_ACTIVITY_STOCK_COUNT(Long activityId) {
+            return LOTTERY_ACTIVITY_STOCK_COUNT + "_" + activityId;
+        }
+
+    }
+
     public enum ResponseCode {
 
         SUCCESS("0000", "成功"),
@@ -50,7 +64,10 @@ public class Constants {
         INDEX_DUPLICATE("0003", "主键冲突"),
         NO_UPDATE("0004", "SQL操作无更新"),
         LOSING_DRAW("D001", "未中奖"),
-        RULE_ERR("D002", "量化人群规则执行失败");
+        RULE_ERR("D002", "量化人群规则执行失败"),
+        NOT_CONSUMED_TAKE("D003", "未消费活动领取记录"),
+        OUT_OF_STOCK("D004", "活动无库存"),
+        ERR_TOKEN("D005", "分布式锁失败");
 
         private String code;
         private String info;

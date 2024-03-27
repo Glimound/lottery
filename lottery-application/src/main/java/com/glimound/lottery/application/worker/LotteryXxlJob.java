@@ -64,7 +64,7 @@ public class LotteryXxlJob {
                         Result state4Result = stateHandler.doing(activityVO.getActivityId(), Constants.ActivityState.PASS);
                         log.info("扫描活动状态为活动中 结果：{} activityId：{} activityName：{} creator：{}", JSON.toJSONString(state4Result), activityVO.getActivityId(), activityVO.getActivityName(), activityVO.getCreator());
                         break;
-                    // 扫描时间已过期的活动，从活动中状态变更为关闭状态【这里也可以细化为2个任务来处理，也可以把时间判断放到数据库中操作】
+                    // 扫描时间已过期的活动，从活动中状态变更为关闭状态
                     case 5:
                         if (activityVO.getEndDateTime().before(new Date())){
                             Result state5Result = stateHandler.close(activityVO.getActivityId(), Constants.ActivityState.DOING);

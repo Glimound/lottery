@@ -4,10 +4,8 @@ import com.glimound.db.router.strategy.IDBRouterStrategy;
 import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
-import com.glimound.lottery.domain.activity.model.vo.ActivityBillVO;
-import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
-import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
-import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
+import com.glimound.lottery.domain.activity.model.res.StockRes;
+import com.glimound.lottery.domain.activity.model.vo.*;
 import com.glimound.lottery.domain.activity.repository.IUserTakeActivityRepository;
 import com.glimound.lottery.domain.activity.service.partake.BaseActivityPartake;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +48,6 @@ public class ActivityPartake extends BaseActivityPartake {
         if (bill.getBeginDateTime().after(partake.getPartakeDate()) || bill.getEndDateTime().before(partake.getPartakeDate())) {
             log.warn("活动时间范围非可用 beginDateTime：{} endDateTime：{}", bill.getBeginDateTime(), bill.getEndDateTime());
             return Result.buildResult(Constants.ResponseCode.UNKNOWN_ERROR, "活动时间范围非可用");
-        }
-
-        // 校验活动库存
-        if (bill.getStockSurplusCount() <= 0) {
-            log.warn("活动剩余库存非可用 stockSurplusCount：{}", bill.getStockSurplusCount());
-            return Result.buildResult(Constants.ResponseCode.UNKNOWN_ERROR, "活动剩余库存非可用");
         }
 
         // 校验个人库存 - 个人活动剩余可领取次数
@@ -110,8 +102,17 @@ public class ActivityPartake extends BaseActivityPartake {
     }
 
     @Override
+    protected StockRes deductActivityStockByRedis(String uId, Long activityId) {
+        return activityRepository.deductActivityStockByRedis(uId, activityId);
+    }
+
+    @Override
+    protected void recoverActivityStockByRedis(Long activityId) {
+        activityRepository.recoverActivityStockByRedis(activityId);
+    }
+
+    @Override
     public Result recordDrawOrder(DrawOrderVO drawOrder) {
-        // TODO：此处是否存在并发问题？MVCC下事务开启时生成快照，使得多个并发请求读取到的state均为1
         try {
             dbRouter.doRouter(drawOrder.getUId());
             return transactionTemplate.execute(status -> {
@@ -151,6 +152,36 @@ public class ActivityPartake extends BaseActivityPartake {
             dbRouter.setTbKey(tbCount);
             // 查询数据
             return userTakeActivityRepository.listFailureMqState();
+        } finally {
+            dbRouter.clear();
+        }
+    }
+
+    @Override
+    public void updateActivityStock(ActivityPartakeRecordVO activityPartakeRecordVO) {
+        userTakeActivityRepository.updateActivityStock(activityPartakeRecordVO);
+    }
+
+    @Override
+    public Result lockTakeActivity(String uId, Long activityId, Long takeId) {
+        try {
+            dbRouter.doRouter(uId);
+            return transactionTemplate.execute(status -> {
+                try {
+                    // 锁定活动领取记录
+                    int lockCount = userTakeActivityRepository.lockTakeActivity(uId, activityId, takeId);
+                    if (0 == lockCount) {
+                        status.setRollbackOnly();
+                        log.error("记录未中奖，个人参与活动抽奖已消耗完 activityId：{} uId：{}", activityId, uId);
+                        return Result.buildResult(Constants.ResponseCode.NO_UPDATE);
+                    }
+                } catch (DuplicateKeyException e) {
+                    status.setRollbackOnly();
+                    log.error("记录未中奖，唯一索引冲突 activityId：{} uId：{}", activityId, uId, e);
+                    return Result.buildResult(Constants.ResponseCode.INDEX_DUPLICATE);
+                }
+                return Result.buildSuccessResult();
+            });
         } finally {
             dbRouter.clear();
         }

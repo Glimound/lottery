@@ -1,13 +1,6 @@
 server:
   port: 8080
 
-#spring:
-#  datasource:
-#    username: root
-#    password: Wst030519
-#    url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=UTF-8
-#    driver-class-name: com.mysql.jdbc.Driver
-
 db-router:
   jdbc:
     datasource:
@@ -85,6 +78,12 @@ spring:
       #listner负责ack，每调用一次，就立即commit
       ack-mode: manual_immediate
       missing-topics-fatal: false
+  redis:
+    database: 0
+    host: 127.0.0.1     # Redis服务器地址，修改为你的地址
+    port: 6379              # Redis服务器连接端口
+    password:          # Redis服务器连接密码（默认为空）
+    timeout: 3000           # Redis服务器链接超时配置
 
 xxl:
   job:
@@ -98,4 +97,3 @@ xxl:
       logpath: ./data/applogs/xxl-job/jobhandler
       logretentiondays: 30
     accessToken: "030519"
-

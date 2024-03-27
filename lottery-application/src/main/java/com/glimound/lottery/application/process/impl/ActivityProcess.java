@@ -9,6 +9,7 @@ import com.glimound.lottery.common.Constants;
 import com.glimound.lottery.common.Result;
 import com.glimound.lottery.domain.activity.model.req.PartakeReq;
 import com.glimound.lottery.domain.activity.model.res.PartakeRes;
+import com.glimound.lottery.domain.activity.model.vo.ActivityPartakeRecordVO;
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
 import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
 import com.glimound.lottery.domain.activity.service.partake.IActivityPartake;
@@ -51,15 +52,30 @@ public class ActivityProcess implements IActivityProcess {
     public DrawProcessRes doDrawProcess(DrawProcessReq req) {
         // 领取活动单
         PartakeRes partakeRes = activityPartake.doPartake(new PartakeReq(req.getUId(), req.getActivityId(), req.getPartakeDate()));
-        if (!Constants.ResponseCode.SUCCESS.getCode().equals(partakeRes.getCode())) {
+        if (!Constants.ResponseCode.SUCCESS.getCode().equals(partakeRes.getCode()) &&
+                !Constants.ResponseCode.NOT_CONSUMED_TAKE.getCode().equals(partakeRes.getCode())) {
             return new DrawProcessRes(partakeRes.getCode(), partakeRes.getInfo());
         }
+
+        // 2. 成功领取活动（非残留活动单），发送 MQ 消息
+        if (Constants.ResponseCode.SUCCESS.getCode().equals(partakeRes.getCode())) {
+            ActivityPartakeRecordVO activityPartakeRecord = new ActivityPartakeRecordVO();
+            BeanUtils.copyProperties(req, activityPartakeRecord);
+            BeanUtils.copyProperties(partakeRes, activityPartakeRecord);
+            // 发送 MQ 消息
+            kafkaProducer.sendLotteryActivityPartakeRecord(activityPartakeRecord);
+        }
+
         Long strategyId = partakeRes.getStrategyId();
         Long takeId = partakeRes.getTakeId();
 
         // 执行抽奖
         DrawRes drawRes = drawExec.doDrawExec(new DrawReq(req.getUId(), strategyId));
         if (Constants.DrawState.FAIL.getCode().equals(drawRes.getDrawState())) {
+            Result result = activityPartake.lockTakeActivity(req.getUId(), req.getActivityId(), takeId);
+            if (!Constants.ResponseCode.SUCCESS.getCode().equals(result.getCode())) {
+                return new DrawProcessRes(Constants.ResponseCode.UNKNOWN_ERROR.getCode(), Constants.ResponseCode.UNKNOWN_ERROR.getInfo());
+            }
             return new DrawProcessRes(Constants.ResponseCode.LOSING_DRAW.getCode(), Constants.ResponseCode.LOSING_DRAW.getInfo());
         }
         DrawAwardVO drawAwardVO = drawRes.getDrawAwardVO();

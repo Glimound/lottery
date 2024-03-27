@@ -1,5 +1,6 @@
 package com.glimound.lottery.domain.activity.repository;
 
+import com.glimound.lottery.domain.activity.model.vo.ActivityPartakeRecordVO;
 import com.glimound.lottery.domain.activity.model.vo.DrawOrderVO;
 import com.glimound.lottery.domain.activity.model.vo.InvoiceVO;
 import com.glimound.lottery.domain.activity.model.vo.UserTakeActivityVO;
@@ -80,5 +81,12 @@ public interface IUserTakeActivityRepository {
      * @return 发货单
      */
     List<InvoiceVO> listFailureMqState();
+
+    /**
+     * 更新活动库存
+     *
+     * @param activityPartakeRecordVO   活动领取记录
+     */
+    void updateActivityStock(ActivityPartakeRecordVO activityPartakeRecordVO);
 
 }

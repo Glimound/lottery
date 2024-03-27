@@ -46,6 +46,7 @@ public class PassState extends AbstractState {
 
     @Override
     public Result doing(Long activityId, Enum<Constants.ActivityState> currentState) {
+        this.activityRepository.addStockCountToRedis(activityId);
         boolean isSuccess = activityRepository.alterStatus(activityId, currentState, Constants.ActivityState.DOING);
         return isSuccess ? Result.buildResult(Constants.ResponseCode.SUCCESS, "活动变更活动中完成") : Result.buildErrorResult("活动状态变更失败");
     }
