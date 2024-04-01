@@ -11,7 +11,7 @@
 
     <artifactId>lottery-interfaces</artifactId>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

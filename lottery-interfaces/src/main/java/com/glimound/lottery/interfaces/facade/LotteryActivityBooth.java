@@ -38,8 +38,14 @@ public class LotteryActivityBooth implements ILotteryActivityBooth {
             // 1. 执行抽奖
             DrawProcessRes drawProcessRes = activityProcess.doDrawProcess(
                     new DrawProcessReq(drawReq.getUId(), drawReq.getActivityId(), new Date()));
+
             if (!Constants.ResponseCode.SUCCESS.getCode().equals(drawProcessRes.getCode())) {
-                log.error("抽奖，失败(抽奖过程异常) uId：{} activityId：{}", drawReq.getUId(), drawReq.getActivityId());
+                if (Constants.ResponseCode.ACTIVITY_NON_EXIST.getCode().equals(drawProcessRes.getCode()) ||
+                        Constants.ResponseCode.OUT_OF_STOCK.getCode().equals(drawProcessRes.getCode())) {
+                    log.info("抽奖失败(库存为空或活动不存在) uId：{} activityId：{}", drawReq.getUId(), drawReq.getActivityId());
+                    return new DrawRes(drawProcessRes.getCode(), drawProcessRes.getInfo());
+                }
+                log.error("抽奖失败(抽奖过程异常) uId：{} activityId：{}", drawReq.getUId(), drawReq.getActivityId());
                 return new DrawRes(drawProcessRes.getCode(), drawProcessRes.getInfo());
             }
 
