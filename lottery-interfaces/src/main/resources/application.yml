@@ -10,18 +10,18 @@ db-router:
       list: db01,db02
       db00:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=utf8
-        username: glimound
+        url: jdbc:mysql://192.168.0.2:3306/lottery?useUnicode=true&characterEncoding=utf8
+        username: root
         password: "030519"
       db01:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery_01?useUnicode=true&characterEncoding=utf8
-        username: glimound
+        url: jdbc:mysql://192.168.0.2:3306/lottery_01?useUnicode=true&characterEncoding=utf8
+        username: root
         password: "030519"
       db02:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lottery_02?useUnicode=true&characterEncoding=utf8
-        username: glimound
+        url: jdbc:mysql://192.168.0.2:3306/lottery_02?useUnicode=true&characterEncoding=utf8
+        username: root
         password: "030519"
 
 mybatis:
@@ -43,7 +43,7 @@ dubbo:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 192.168.0.2:9092
     producer:
       # 发生错误后，消息重发的次数。
       retries: 1
@@ -80,7 +80,7 @@ spring:
       missing-topics-fatal: false
   redis:
     database: 0
-    host: 127.0.0.1     # Redis服务器地址，修改为你的地址
+    host: 192.168.0.2     # Redis服务器地址，修改为你的地址
     port: 6379              # Redis服务器连接端口
     password:          # Redis服务器连接密码（默认为空）
     timeout: 3000           # Redis服务器链接超时配置
@@ -88,7 +88,7 @@ spring:
 xxl:
   job:
     admin:
-      addresses: http://127.0.0.1:8089/xxl-job-admin
+      addresses: http://192.168.0.2:8089/xxl-job-admin
     executor:
       address:
       appname: lottery-job

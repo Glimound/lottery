@@ -28,7 +28,7 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
         Integer stockCount = activityRepository.getActivityStockByRedis(req.getActivityId());
         if (stockCount == null) {
             // 若redis返回null，说明活动已过期，返回error
-            return new PartakeRes(Constants.ResponseCode.UNKNOWN_ERROR.getCode(), "该活动不存在");
+            return new PartakeRes(Constants.ResponseCode.ACTIVITY_NON_EXIST.getCode(), Constants.ResponseCode.ACTIVITY_NON_EXIST.getInfo());
         }
         if (stockCount <= 0) {
             // 库存已耗尽
